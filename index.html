@@ -18,69 +18,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
    
 
-	public ActionResult Index()
-{
-    System.OperatingSystem osInfo = System.Environment.OSVersion;//获取操作系统版本
-    int versionMajor = osInfo.Version.Major;
-    int versionMinor = osInfo.Version.Minor;
-    ViewBag.Brower = Request.Browser.Type.ToString();//获取客户端的浏览器
-    ViewBag.Url = Request.Url.ToString();//获取客户端的url地址
-    IPAddress myIPAddress = (IPAddress)Dns.GetHostAddresses(Dns.GetHostName()).GetValue(0);
-    ViewData["IP"] = Request.UserHostAddress.ToString();
-    ViewBag.ip = ViewData["IP"];//获取客户端的ip地址
-    ViewBag.gsd = GetIpAddRess(ViewBag.ip);
-    //DateTime DT = System.DateTime.Now;
-    ViewBag.dt = System.DateTime.Now.ToString();//获取客户端的当前时间
-    //判断客户端所使用的那个版本的操作系统
-     if (versionMajor == 5 && versionMinor == 1)
-     {
-         ViewBag.os = "Win XP";
-      }
-      else if (versionMajor == 6 && versionMinor == 0)
-      {
-         ViewBag.os = "Win Vista";
-       }
-      else if (versionMajor == 6 && versionMinor == 1)
-      {
-         ViewBag.os = "Win 7";
-       }
-       else if (versionMajor == 5 && versionMinor == 0)
-       {
-           ViewBag.os = "Win 2000";
-       }
-       else
-       {
-          ViewBag.os = "未知";
-        }
-        using (StreamWriter sw = new StreamWriter(@"ip.txt",true))//若要追加数据到该文件中，则为 true；若要覆盖该文件，则为 false。如果指定的文件不存在，该参数无效，且构造函数将创建一个新文件。
-        {  
-           sw.Write(ViewBag.dt+"    ");
-           sw.Write(ViewBag.os+"    ");
-           sw.Write(ViewBag.Brower+"    ");
-           sw.Write(ViewBag.ip+"    ");
-           sw.Write(ViewBag.gsd);
-           sw.WriteLine("来源:"+ViewBag.Url);
-           sw.Close(); 
-            }
-       return View();
-        }
-
-public string GetIpAddRess(string Ip)//www.ip138.com外部判断ip地址的归属地
-{
-    WebRequest request = WebRequest.Create("http://www.ip138.com/ips138.asp?ip=192.168.199.207");
-    WebResponse response = request.GetResponse();
-    StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("gb2312"));
-    string read = reader.ReadToEnd();
-    Regex regex = new Regex("<td align=\"center\"><ul class=\"ul1\"><li>本站主数据：(?<title>.*?)</li>");
-    if (regex.IsMatch(read))
-    {
-       read = regex.Match(read).Groups["title"].Value;
- }
-   return read;
-}
-        }
-}
-	
 	
 	
 <html xmlns:v="urn:schemas-microsoft-com:vml"
